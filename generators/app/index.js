@@ -49,16 +49,26 @@ module.exports = class extends Generator {
       {
         globOptions: { dot: true }
       }
+    );
+
+    this.fs.copyTpl(
+      this.templatePath(`Jsons/${this.answer.language}/package.ejs`),
+      this.destinationPath(`${this.answer.name}/package.json`),
+      this.answer,
+    );
+
+    this.fs.copyTpl(
+      this.templatePath(`Jsons/${this.answer.language}/package.example.ejs`),
+      this.destinationPath(`${this.answer.name}/example/package.json`),
+      this.answer,
     )
 }
 
   install() {
-    process.chdir(this.answer.name);
-    this.installDependencies();
+
   }
 
   end() {
-    process.chdir(this.destinationPath( this.answer.name + '/example/'));
-    this.installDependencies();
+    console.log("template copied done...")
   }
 };
