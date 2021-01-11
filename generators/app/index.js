@@ -1,5 +1,16 @@
 'use strict';
 const Generator = require('yeoman-generator');
+const execa = require('execa');
+const pEachSeries = require('p-each-series');
+const ora = require('ora');
+
+const excution = async (args) => {
+  return pEachSeries(args, async ({cmd, args, cwd}) => {
+      return execa(cmd, args, {cwd})
+  })
+}
+
+
 
 module.exports = class extends Generator {
   async prompting() {
@@ -28,6 +39,12 @@ module.exports = class extends Generator {
         name: 'language',
         message: 'Choose your favor language',
         default: 'Javascript'
+      },
+      {
+        type: "input",
+        name: "repo",
+        message: "Please entre your git reop address!",
+        default: ''
       }
     ];
 
@@ -64,11 +81,58 @@ module.exports = class extends Generator {
     )
 }
 
-  install() {
+  async end() {
+    const depath = this.destinationPath(this.answer.name);
+    const Dependencies = [
+      {
+        cmd: 'npm',
+        args: ['install'],
+        cwd: depath
+      },
+      {
+        cmd: 'npm',
+        args: ['install'],
+        cwd: this.destinationPath(this.answer.name + '/example')
+      }
+    ]
 
-  }
+    const rootP = excution(Dependencies);
+    ora.promise(rootP, `Downloading dependencies, please waiting and eating an apple...`);
+    await rootP;
 
-  end() {
-    console.log("template copied done...")
+
+    const Git = [
+      {
+        cmd: 'git',
+        args: ['init'],
+        cwd: depath
+      },
+      {
+        cmd: 'git',
+        args: ['remote', 'add', 'origin', this.answer.repo],
+        cwd: depath
+      },
+      {
+        cmd: 'git',
+        args: ['add', '.'],
+        cwd: depath
+      },
+      {
+        cmd: 'git',
+        args: ['commit', '-m', `init ${this.answer.name}`],
+        cwd: depath
+      },
+      {
+        cmd: 'git',
+        args: ["push", "origin", "master"],
+        cwd: depath
+      }
+    ]
+
+    const gitP = excution(Git);
+    ora.promise(gitP, 'Pushing first commits to github repo...');
+    await gitP;
+
+    console.log("All done...")
   }
 };

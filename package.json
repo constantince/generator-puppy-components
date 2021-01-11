@@ -1,6 +1,6 @@
 {
   "name": "generator-puppy-components",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "create standard comps",
   "homepage": "",
   "author": {
@@ -33,8 +33,11 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
-    "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
+    "execa": "^5.0.0",
+    "ora": "^5.2.0",
+    "p-each-series": "^2.2.0",
+    "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   },
   "jest": {
