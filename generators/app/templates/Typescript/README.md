@@ -1,4 +1,4 @@
-# <%=desc%>
+# <%=name%>
 
 > <%=desc%>
 
@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save <%=desc%>
+npm install --save <%=name%>
 ```
 
 ## Usage
