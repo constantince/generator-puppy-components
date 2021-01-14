@@ -83,24 +83,7 @@ module.exports = class extends Generator {
 
   async end() {
     const depath = this.destinationPath(this.answer.name);
-    const Dependencies = [
-      {
-        cmd: 'npm',
-        args: ['install'],
-        cwd: depath
-      },
-      {
-        cmd: 'npm',
-        args: ['install'],
-        cwd: this.destinationPath(this.answer.name + '/example')
-      }
-    ]
-
-    const rootP = excution(Dependencies);
-    ora.promise(rootP, `Downloading dependencies, please waiting and eating an apple...`);
-    await rootP;
-
-
+    
     const Git = [
       {
         cmd: 'git',
@@ -132,6 +115,25 @@ module.exports = class extends Generator {
     const gitP = excution(Git);
     ora.promise(gitP, 'Pushing first commits to github repo...');
     await gitP;
+    const Dependencies = [
+      {
+        cmd: 'npm',
+        args: ['install'],
+        cwd: depath
+      },
+      {
+        cmd: 'npm',
+        args: ['install'],
+        cwd: this.destinationPath(this.answer.name + '/example')
+      }
+    ]
+
+    const rootP = excution(Dependencies);
+    ora.promise(rootP, `Downloading dependencies, please waiting and eating an apple...`);
+    await rootP;
+
+
+   
 
     console.log("All done...")
   }
